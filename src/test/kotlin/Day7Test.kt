@@ -5,7 +5,7 @@ class Day7Test {
 
 
     @Test
-    fun `test_demo_input`() {
+    fun test_demo_input() {
         assertEquals(
             4, numberOfBagColorsThatCanContainGoldBag(
                 ("light red bags contain 1 bright white bag, 2 muted yellow bags.\n" +
@@ -220,49 +220,6 @@ class Day7Test {
                 it.second,
                 bagRules
             ))
-        }
-    }
-
-    object Task2 {
-        fun numberOfBagsThatContainBag(input: String, bag: String): Int {
-            val bagList = input
-                .replace("bags", "bag")
-                .replace(".", "")
-                .replace("no", "0") // This would be an issue if we needed to preserve the names of the bags
-                .lines()
-
-            return numberOfBagsThatContainBag(bagList, bag)
-        }
-
-        private fun numberOfBagsThatContainBag(lines: List<String>, bag: String): Int {
-            val bagsWithBag = lines.filter { it.firstBagPart().contains(bag) }
-            val bagsToFind = bagsWithBag.map { it.secondBagPart() }
-
-            if (bagsToFind.isEmpty()) {
-                return 0
-            } else {
-                val bagsCountList = bagsToFind
-                    .joinToString("")
-                    .split(", ")
-                    .map { it.substringAfter(" ") to it.substringBefore(" ").toInt() }
-
-                val currentSum = bagsCountList.map { it.second }.sum()
-                return bagsCountList.fold(currentSum) { sum, bagCount ->
-                    sum + bagCount.second * numberOfBagsThatContainBag(
-                        lines,
-                        bagCount.first
-                    )
-                }
-            }
-        }
-
-        fun String.firstBagPart(): String {
-
-            return substringBefore(" contain ")
-        }
-
-        fun String.secondBagPart(): String {
-            return substringAfter(" contain ")
         }
     }
 
