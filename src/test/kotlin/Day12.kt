@@ -67,31 +67,14 @@ class Day12 {
 
     }
 
-    @Test
-    fun `test demo input`() {
-        val input =
-                "F10\n" +
-                "N3\n" +
-                "F7\n" +
-                "R90\n" +
-                "F11"
-        assertEquals(286, getManhattanDistanceFromStartPartTwo(EAST,0,0, input))
-    }
-
-    @Test
-    fun `test real input`() {
-        val input = readFileAsString("/Users/fredrikfolkesson/git/advent-of-code/inputs/input-day12.txt")
-        println(getManhattanDistanceFromStartPartTwo(EAST,0,0, input))
-    }
-
     private fun getManhattanDistanceFromStart(direction: Direction, degreesNorth: Int, degreesEast: Int, instructionsAsString: String): Int {
 
         val instructions = instructionsAsString.lines().map { toCommand(it) }
         println(instructions)
 
         val endShip = instructions.fold(Ship(direction, degreesNorth, degreesEast)) { currentShip, command ->
-                println(currentShip)
-                currentShip.executeCommand(command)
+            println(currentShip)
+            currentShip.executeCommand(command)
         }
 
         return endShip.getManhattanDistance()
@@ -137,14 +120,6 @@ class Day12 {
         }
     }
 
-
-    @Test
-    fun `test toCommand`() {
-        assertEquals(Pair(FORWARD,10), toCommand("F10"))
-        assertEquals(Pair(MOVE_NORTH,3), toCommand("N3"))
-        assertEquals(Pair(TURN_RIGHT,90), toCommand("R90"))
-    }
-
     private fun toCommand(commandString: String): Pair<Action, Int> {
         val action = when(commandString[0]) {
             'N' -> MOVE_NORTH
@@ -161,6 +136,35 @@ class Day12 {
 
 
     }
+
+    @Test
+    fun `test demo input`() {
+        val input =
+                "F10\n" +
+                "N3\n" +
+                "F7\n" +
+                "R90\n" +
+                "F11"
+        assertEquals(286, getManhattanDistanceFromStartPartTwo(EAST,0,0, input))
+    }
+
+    @Test
+    fun `test real input`() {
+        val input = readFileAsString("/Users/fredrikfolkesson/git/advent-of-code/inputs/input-day12.txt")
+        println(getManhattanDistanceFromStartPartTwo(EAST,0,0, input))
+    }
+
+
+
+
+    @Test
+    fun `test toCommand`() {
+        assertEquals(Pair(FORWARD,10), toCommand("F10"))
+        assertEquals(Pair(MOVE_NORTH,3), toCommand("N3"))
+        assertEquals(Pair(TURN_RIGHT,90), toCommand("R90"))
+    }
+
+
 
 
 }
