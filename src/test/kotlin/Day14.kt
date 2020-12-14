@@ -19,7 +19,7 @@ class Day14 {
                 Pair(newMask,acc.second)
             } else {
                 val (memoryAddress, value) = toMemoryAddressAndValuePair(line)
-                Pair(acc.first, acc.second + mapOf(memoryAddress to numberAfterMasking(value.toInt(), acc.first)))
+                Pair(acc.first, acc.second + mapOf(memoryAddress to numberAfterMasking(value, acc.first)))
             }
         }.second.values.sum().toLong()
     }
@@ -68,13 +68,13 @@ class Day14 {
                 Pair(newMask,acc.second)
             } else {
                 val (memoryAddress, value) = toMemoryAddressAndValuePair(line)
-                Pair(acc.first, acc.second + addressesAfterMasking(memoryAddress.toInt(), acc.first).map { it to value }.toMap())
+                Pair(acc.first, acc.second + addressesAfterMasking(memoryAddress, acc.first).map { it to value }.toMap())
             }
         }.second.values.sum()
     }
 
-    private fun addressesAfterMasking(memoryAdress: Int, mask: String): List<Long> {
-        val memoryAdressBinaryString = Integer.toBinaryString(memoryAdress).padStart(36,'0')
+    private fun addressesAfterMasking(memoryAdress: Long, mask: String): List<Long> {
+        val memoryAdressBinaryString = memoryAdress.toString(2).padStart(36,'0')
         val memoryAdressBinaryStringWithOnesAndXes = mask.mapIndexed{index, it ->
             if(it =='0') memoryAdressBinaryString[index] else it
         }.joinToString("").padStart(36,'0')
@@ -97,9 +97,8 @@ class Day14 {
     }
 
 
-    private fun numberAfterMasking(number: Int, mask: String): Long {
-        val numberAsBinaryString = Integer.toBinaryString(number).padStart(36,'0')
-        val numberAsLong = number.toLong()
+    private fun numberAfterMasking(number: Long, mask: String): Long {
+        val numberAsBinaryString = number.toString(2).padStart(36,'0')
         val orMaskString = mask.mapIndexed{index, it ->
             if(it =='1') it else numberAsBinaryString[index]
         }.joinToString("").padStart(36,'0')
@@ -111,7 +110,7 @@ class Day14 {
         }.joinToString("").padStart(36,'0')
         val andMaskInt = andMaskString.toLong(2)
 
-        return numberAsLong or orMaskInt and andMaskInt
+        return number or orMaskInt and andMaskInt
     }
 
     private fun to36BitStringFormat(number: Int): String {
