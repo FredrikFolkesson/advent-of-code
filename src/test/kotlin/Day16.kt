@@ -86,27 +86,16 @@ class Day16 {
 
         val fieldNameToIndex = mutableMapOf<String, Int>()
 
-        while (!fieldToAllowedNumbers.isEmpty()) {
-            var remove = false
-            var fieldToRemove = ""
-            var indexAndsetToRemove = Pair<Int, MutableSet<Int>>(0, mutableSetOf())
+        while (listOfSetByColumns.isNotEmpty()) {
 
-            fieldToAllowedNumbers.forEach { (fieldName, allowedNumbersForField) ->
-                val matchingColumns = listOfSetByColumns.filterIndexed { index, pair ->
-                    allowedNumbersForField.containsAll(pair.second)
-                }
-                if (matchingColumns.size == 1) {
-                    remove = true
-                    fieldToRemove = fieldName
-                    fieldNameToIndex[fieldName] = matchingColumns[0].first
-                    indexAndsetToRemove = matchingColumns[0]
-                }
-            }
+            val (fieldName, matchingColumns) = fieldToAllowedNumbers.map { (fieldName, allowedNumbersForField) ->
+                Pair(fieldName, listOfSetByColumns.filter {
+                    allowedNumbersForField.containsAll(it.second)
+                })
+            }.first { it.second.size == 1 }
 
-            if (remove) {
-                fieldToAllowedNumbers.remove(fieldToRemove)
-                listOfSetByColumns.remove(indexAndsetToRemove)
-            }
+            listOfSetByColumns.remove(matchingColumns.first())
+            fieldNameToIndex[fieldName] = matchingColumns.first().first
 
         }
         return fieldNameToIndex
