@@ -91,7 +91,7 @@ class Day17 {
 
     }
 
-    private fun bootUpPart2(startState: MutableMap<Quadruple<Int, Int, Int,Int>, Boolean>, cyclesLeft: Int): MutableMap<Quadruple<Int, Int, Int,Int>, Boolean> {
+    private fun bootUpPart2(startState: Map<Quadruple<Int, Int, Int,Int>, Boolean>, cyclesLeft: Int): Map<Quadruple<Int, Int, Int,Int>, Boolean> {
         if (cyclesLeft == 0) {
             return startState
         }
@@ -99,22 +99,17 @@ class Day17 {
 
         val activeCubes = startState.filter { it.value }
 
-        val endState = activeCubes.map {
+        val endStateForActives = activeCubes.map {
             val activeNeighbours = getNumberOfActiveNeighbours4d(it.key, startState)
             if(activeNeighbours == 2 || activeNeighbours == 3) Pair(it.key, true) else Pair(it.key, false)
-        }.toMap().toMutableMap()
-
-        val endStateForNeighboursToActives = activeCubes.keys.fold(mutableSetOf<Quadruple<Int, Int, Int, Int>>()) { setOfNeighbours, position ->
-            setOfNeighbours.addAll(findAllNeighbourPositions4d(position).filter { it !in activeCubes })
-            setOfNeighbours
+        }.toMap()
+        val endStateForNeighboursToActives = activeCubes.keys.fold(setOf<Quadruple<Int, Int, Int, Int>>()) { setOfNeighbours, position ->
+            setOfNeighbours + (findAllNeighbourPositions4d(position).filter { it !in activeCubes })
         }.filter {
             getNumberOfActiveNeighbours4d(it, startState) == 3
-        }.map { it to true }.toMap().toMutableMap()
+        }.map { it to true }.toMap()
 
-        endState.putAll(endStateForNeighboursToActives)
-
-
-        return bootUpPart2(endState ,cyclesLeft-1)
+        return bootUpPart2(endStateForActives +  endStateForNeighboursToActives,cyclesLeft-1)
 
     }
 
@@ -148,7 +143,7 @@ class Day17 {
     }
     private fun getNumberOfActiveNeighbours4d(
         position: Quadruple<Int, Int, Int, Int>,
-        startState: MutableMap<Quadruple<Int, Int, Int, Int>, Boolean>
+        startState: Map<Quadruple<Int, Int, Int, Int>, Boolean>
     ): Int {
         return findAllNeighbourPositions4d(position).map { startState.getOrDefault(it,false) }.count { it }
     }
