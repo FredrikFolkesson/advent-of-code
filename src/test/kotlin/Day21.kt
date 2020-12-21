@@ -36,12 +36,11 @@ class Day21 {
             .lines()
             .map { parseFood(it) }
             .map { it.values.first() }
-            .map { it }
 
         val allIngredientsCount = mutableMapOf<String, Int>()
         allIngredientsList.forEach {
             it.forEach { ingredient ->
-                allIngredientsCount.put(ingredient, allIngredientsCount.getOrDefault(ingredient, 0) + 1)
+                allIngredientsCount[ingredient] = allIngredientsCount.getOrDefault(ingredient, 0) + 1
             }
         }
         return allIngredientsCount.filter { it.key in nonAllergenics }.values.sum()
@@ -89,7 +88,7 @@ class Day21 {
                     }
                 }
             }
-        val foundIngredientsThatAreAllergens = mutableSetOf<String>()
+
         val ingredientToAllergen = mutableMapOf<String,String>()
         while (foundPossibleAllergens.values.any { it.isNotEmpty() }) {
 
@@ -97,8 +96,6 @@ class Day21 {
             val onlyOneIngredientForAllergen = entryThatIsAnAllergen.value.toList().first()
 
             ingredientToAllergen.put(entryThatIsAnAllergen.key,onlyOneIngredientForAllergen)
-
-            foundIngredientsThatAreAllergens.add(onlyOneIngredientForAllergen)
 
             foundPossibleAllergens.values.map {
                 it.remove(onlyOneIngredientForAllergen)
