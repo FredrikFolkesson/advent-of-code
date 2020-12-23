@@ -30,6 +30,11 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.ginsberg</groupId>
+            <artifactId>cirkle</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
