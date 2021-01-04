@@ -41,14 +41,14 @@ class Day25 {
 
 
     private fun findLoopSize(subjectNumber: Long, publicKey: Long): Long {
-        var transformedNumber = subjectNumber
+        var transformedNumber = 1L
         var loop = 0L
         while (transformedNumber != publicKey) {
             transformedNumber *= subjectNumber
             transformedNumber %= 20201227
             loop += 1
         }
-        return loop + 1
+        return loop
     }
 }
 
